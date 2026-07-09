@@ -1,0 +1,35 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 👇 Add the AWS Credentials step HERE
+
+      # Step 3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 4
+      - name: Terraform Init
+        run: terraform init
