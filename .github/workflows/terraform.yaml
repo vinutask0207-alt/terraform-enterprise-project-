@@ -1,28 +1,32 @@
+# Workflow name displayed in GitHub Actions
 name: Terraform CI
 
+# Trigger workflow when code is pushed
 on:
   push:
     branches:
       - main
       - feature/**
 
+# Jobs to execute
 jobs:
   terraform:
+
+    # Runner on which the workflow executes
     runs-on: ubuntu-latest
 
+    # Steps executed one by one
     steps:
 
-      # Step 1
+      # Step 1 - Download repository code onto the runner
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2
+      # Step 2 - Install Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 👇 Add the AWS Credentials step HERE
-
-      # Step 3
+      # Step 3 - Configure AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -30,6 +34,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # Step 4
+      # Step 4 - Initialize Terraform
       - name: Terraform Init
         run: terraform init
+
+      # Step 5 - Check Terraform formatting
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # Step 6 - Validate Terraform configuration
+      - name: Terraform Validate
+        run: terraform validate
+
+      # Step 7 - Show execution plan
+      - name: Terraform Plan
+        run: terraform plan
