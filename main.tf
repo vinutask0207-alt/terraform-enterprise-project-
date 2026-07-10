@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "demo_bucket" {
   bucket = var.bucket_name
 
   tags = {
-    Name        = "Terraform-Demo-Bucket"
+    Name        = "Vinuta-Bucket-B"
     Environment = var.environment
   }
 }
